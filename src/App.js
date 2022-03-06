@@ -5,20 +5,20 @@ import { getPlacesData } from "./api";
 import Header from "./components/Header/Header";
 import List from "./components/List/List";
 import Map from "./components/Map/Map";
-import PlaceDetails from "./components/PlaceDetails/PlaceDetails";
+// import PlaceDetails from "./components/PlaceDetails/PlaceDetails";
 
 const App = () => {
-  const [places, setPlaces] = useState([]);
-  const [filteredPlaces, setFilteredPlaces] = useState([]);
-
-  const [childClicked, setChildClicked] = useState(null);
-
-  const [coordinates, setCoordinates] = useState({});
-  const [bounds, setBounds] = useState({});
-
-  const [isLoading, setIsLoading] = useState(false);
   const [type, setType] = useState("restaurants");
   const [rating, setRating] = useState("");
+
+  const [coordinates, setCoordinates] = useState({});
+  const [bounds, setBounds] = useState(null);
+
+  const [filteredPlaces, setFilteredPlaces] = useState([]);
+  const [places, setPlaces] = useState([]);
+
+  const [childClicked, setChildClicked] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -29,9 +29,9 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    const filteredPlaces = places.filter(place => place.rating > rating);
+    const filtered = places.filter(place => Number(place.rating) > rating);
 
-    setFilteredPlaces(filteredPlaces);
+    setFilteredPlaces(filtered);
   }, [rating]);
 
   useEffect(() => {
