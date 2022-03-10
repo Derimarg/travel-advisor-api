@@ -4,15 +4,16 @@ import { Paper, Typography, useMediaQuery } from "@material-ui/core";
 import LocationOnOutlinedIcon from "@material-ui/icons/LocationOnOutlined";
 import Rating from "@material-ui/lab/Rating";
 
-// import mapStyles from "../../mapStyles";
+import mapStyles from "./mapStyles";
 import useStyles from "./styles.js";
 
 const Map = ({
+  coords,
   setCoordinates,
   setBounds,
-  coordinates,
   places,
-  setchildClicked,
+  setChildClicked,
+  weatherData,
 }) => {
   const classes = useStyles();
   const isDesktop = useMediaQuery("(min-width:600px)");
@@ -21,16 +22,20 @@ const Map = ({
     <div className={classes.mapContainer}>
       <GoogleMapReact
         bootstrapURLKeys={{ key: "AIzaSyCGaG4z8rPhKxATZM51NgnLytNlW3Ci6Y4" }}
-        defaultCenter={coordinates}
-        center={coordinates}
+        defaultCenter={coords}
+        center={coords}
         defaultZoom={14}
         margin={[50, 50, 50, 50]}
-        options={""}
+        options={{
+          disableDefaultUI: true,
+          zoomControl: true,
+          styles: mapStyles,
+        }}
         onChange={e => {
           setCoordinates({ lat: e.center.lat, lng: e.center.lng });
           setBounds({ ne: e.marginBounds.ne, sw: e.marginBounds.sw });
         }}
-        onChildClick={child => setchildClicked(child)}
+        onChildClick={child => setChildClicked(child)}
       >
         {places?.map((place, i) => (
           <div
@@ -48,7 +53,6 @@ const Map = ({
                   variant="subtitle2"
                   gutterBottom
                 >
-                  {" "}
                   {place.name}
                 </Typography>
                 <img
@@ -68,6 +72,15 @@ const Map = ({
                 />
               </Paper>
             )}
+          </div>
+        ))}
+        {weatherData?.list?.map((data, i) => (
+          <div key={i} lat={data.coord.lat} lng={data.coord.lon}>
+            <img
+              height="70px"
+              src={`https://openweathermap.org/img/w/${data.weather[0].icon}.png`}
+              alt="weather icon"
+            />
           </div>
         ))}
       </GoogleMapReact>
